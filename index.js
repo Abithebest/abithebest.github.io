@@ -40,42 +40,80 @@ blurElem.addEventListener('click', () => {
 
 function refreshPhotos(genre) {
     galleryElem.innerHTML = '';
-    let shuffledPhotos = new Array();
-    if(genre != 'all') {
-        shuffledPhotos = shuffle(gallery.filter(a => {
-            if(!a) return false;
-            if(a.type == genre) return true;
-        }))
+
+    let shuffledPhotos = [];
+    if (genre !== 'all') {
+        shuffledPhotos = shuffle(
+            gallery.filter(a => a && a.type === genre)
+        );
     } else {
-        shuffledPhotos = shuffle(gallery)
+        shuffledPhotos = shuffle(gallery);
     }
 
-    shuffledPhotos.forEach(photo => {
-        if(!photo) return;
-        let newElem = document.createElement('div')
-        newElem.className = 'card';
-        newElem.innerHTML = `
-            <img src="${photo.asset}">
-            <div class="info">
-                <div class="infoDate">${photo.date}</div>
-                <div class="infoLocation">${photo.location}</div>
-            </div>
-        `;
+    const BATCH_SIZE = 20;
+    let currentIndex = 0;
 
-        newElem.addEventListener('click', () => {
-            openPhoto(photo)
-        })
-        newElem.addEventListener('mouseover', () => {
-            if(mobile) return;
-            newElem.querySelector('.info').style.display = 'block';
-        })
-        newElem.addEventListener('mouseleave', () => {
-            if(mobile) return;
-            newElem.querySelector('.info').style.display = 'none';
-        })
+    const oldSentinel = document.getElementById('scroll-sentinel');
+    if (oldSentinel) oldSentinel.remove();
 
-        galleryElem.appendChild(newElem)
-    })
+    const sentinel = document.createElement('div');
+    sentinel.id = 'scroll-sentinel';
+    sentinel.style.height = '1px';
+    galleryElem.after(sentinel);
+
+    function loadNextBatch() {
+        const slice = shuffledPhotos.slice(
+            currentIndex,
+            currentIndex + BATCH_SIZE
+        );
+        currentIndex += BATCH_SIZE;
+
+        slice.forEach(photo => {
+            if (!photo) return;
+
+            const newElem = document.createElement('div');
+            newElem.className = 'card';
+            newElem.innerHTML = `
+                <img src="${photo.asset}" loading="lazy">
+                <div class="info">
+                    <div class="infoDate">${photo.date}</div>
+                    <div class="infoLocation">${photo.location}</div>
+                </div>
+            `;
+
+            newElem.addEventListener('click', () => {
+                openPhoto(photo);
+            });
+
+            newElem.addEventListener('mouseover', () => {
+                if (mobile) return;
+                newElem.querySelector('.info').style.display = 'block';
+            });
+
+            newElem.addEventListener('mouseleave', () => {
+                if (mobile) return;
+                newElem.querySelector('.info').style.display = 'none';
+            });
+
+            galleryElem.appendChild(newElem);
+        });
+
+        if (currentIndex >= shuffledPhotos.length) {
+            observer.disconnect();
+        }
+    }
+
+    const observer = new IntersectionObserver(entries => {
+        if (entries[0].isIntersecting) {
+            loadNextBatch();
+        }
+    }, {
+        rootMargin: '300px'
+    });
+
+    observer.observe(sentinel);
+
+    loadNextBatch();
 }
 
 const instagram = document.getElementById('instagram')
