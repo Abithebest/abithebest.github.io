@@ -136,7 +136,7 @@ function refreshPhotos(genre) {
             loadNextBatch();
         }
     }, {
-        rootMargin: '700px'
+        rootMargin: '300px'
     });
 
     observer.observe(sentinel);
