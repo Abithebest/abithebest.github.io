@@ -12,9 +12,26 @@
 }
 
 body, html {
-    margin:5px;
+    margin:0;
     height:100%;
     height:100%;
+    overflow-x:hidden;
+}
+
+#blur {
+    position:fixed;
+    display:none;
+    color:var(--bg);
+    justify-content:center;
+    background:rgb(0,0,0,0.5);
+    backdrop-filter: blur(10px);
+    width:100%;
+    height:100%;
+    z-index:2;
+    top:0;
+    left:0;
+    opacity:0;
+    transition:opacity 0.2s ease;
 }
 
 #biography {
@@ -23,10 +40,19 @@ body, html {
     align-items:center;
     margin-bottom:10px;
 }
+body[mobile] #biography {
+    display:block;
+}
 #bioText {
     display:flex;
     align-items:center;
     min-width:550px;
+}
+body[mobile] #bioText {
+    flex-direction:column;
+    justify-content:center;
+    width:100vw;
+    min-width:0;
 }
 #hello {
     font-size:1.5rem;
@@ -36,6 +62,9 @@ body, html {
     font-size:3rem;
     font-weight:1000;
     margin-top:-18px;
+}
+body[mobile] #name {
+    font-size:2.5rem;
 }
 #description {
     font-size:1rem;
@@ -49,11 +78,18 @@ body, html {
     border-radius:100%;
     margin-right:5px;
 }
+body[mobile] #self {
+    margin-right:0;
+}
 
 #gallery {
     column-count:4;
     column-gap:16px;
     margin-top:20px;
+    padding:5px;
+}
+body[mobile] #gallery {
+    column-count:2;
 }
 #gallery img {
     width:100%;
@@ -87,9 +123,29 @@ body, html {
     display:flex;
     gap:5px;
 }
+body[mobile] #socials {
+    justify-content:center;
+    margin-top:5px;
+}
 .social {
     cursor:pointer;
     width:30px;
     height:30px;
     margin-top:-10px;
+}
+
+body[mobile] #popup {
+    height:unset;
+    width:90%;
+}
+#popup {
+    position:fixed;
+    display:none;
+    z-index:999;
+    opacity:0;
+    height:90%;
+    top:50%;
+    left:50%;
+    transform: translate(-50%, -50%);
+    transition:opacity 0.2s ease;
 }

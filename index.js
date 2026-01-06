@@ -1,3 +1,5 @@
+const body = document.body;
+
 const galleryElem = document.getElementById('gallery')
 const genres = ['all', 'misc', 'portraits', 'nature', 'sports', 'cars']
 
@@ -15,6 +17,26 @@ function shuffle(array) {
 
     return array;
 }
+
+const blurElem = document.getElementById('blur')
+const popupElem = document.getElementById('popup')
+function openPhoto(photo) {
+    popupElem.src = photo.asset;
+    popupElem.style.display = 'block';
+    blurElem.style.display = 'flex';
+
+    popupElem.style.opacity = 1;
+    blurElem.style.opacity = 1;
+}
+blurElem.addEventListener('click', () => {
+    popupElem.style.opacity = 0;
+    blurElem.style.opacity = 0;
+
+    setTimeout(() => {
+        popupElem.style.display = 'none';
+        blurElem.style.display = 'none';
+    }, 200)
+})
 
 function refreshPhotos(genre) {
     galleryElem.innerHTML = '';
@@ -40,10 +62,15 @@ function refreshPhotos(genre) {
             </div>
         `;
 
+        newElem.addEventListener('click', () => {
+            openPhoto(photo)
+        })
         newElem.addEventListener('mouseover', () => {
+            if(mobile) return;
             newElem.querySelector('.info').style.display = 'block';
         })
         newElem.addEventListener('mouseleave', () => {
+            if(mobile) return;
             newElem.querySelector('.info').style.display = 'none';
         })
 
@@ -76,3 +103,9 @@ if(window.location.hash) {
 
     refreshPhotos(genreName)
 } else { refreshPhotos('all') }
+
+let mobile = false;
+if (screen.width <= 550) {
+    mobile = true;
+    body.setAttribute('mobile', '')
+}
