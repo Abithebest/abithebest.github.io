@@ -56,5 +56,17 @@ const gallery = [
         type: 'misc',
         date: 'January 4th, 2026',
         location: 'Circle B Bar Reserve, Polk County Florida'
+    },
+    {
+        asset: '/gallery/nature/IMG_4104.jpg',
+        type: 'nature',
+        date: 'January 4th, 2026',
+        location: 'Circle B Bar Reserve, Polk County Florida'
+    },
+    {
+        asset: '/gallery/nature/IMG_4171.jpg',
+        type: 'nature',
+        date: 'January 4th, 2026',
+        location: 'Circle B Bar Reserve, Polk County Florida'
     }
 ]

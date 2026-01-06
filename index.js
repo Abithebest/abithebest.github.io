@@ -56,21 +56,23 @@ instagram.addEventListener('click', () => {
     window.open('https://www.instagram.com/abisphotos1?igsh=eTE3Y2g0eWY3cDdu', '_blank')
 })
 
+const genreSelection = document.getElementById('genreSelection')
+genreSelection.addEventListener('change', () => {
+    refreshPhotos(genreSelection.value)
+    window.location.hash = genreSelection.value;
+})
+
 window.addEventListener("hashchange", function() {
   let genreName = window.location.hash.substring(1).toLowerCase().trim();
   if(!genres.includes(genreName)) genreName = 'all';
+  genreSelection.value = genreName;
 
   refreshPhotos(genreName)
 });
 if(window.location.hash) {
     let genreName = window.location.hash.substring(1).toLowerCase().trim();
     if(!genres.includes(genreName)) genreName = 'all';
+    genreSelection.value = genreName;
 
     refreshPhotos(genreName)
 } else { refreshPhotos('all') }
-
-const genreSelection = document.getElementById('genreSelection')
-genreSelection.addEventListener('change', () => {
-    refreshPhotos(genreSelection.value)
-    window.location.hash = genreSelection.value;
-})
