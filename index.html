@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Abisail Santiago</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body style="display:flex;flex-direction:column;">
+    <div id="info"></div>
+    <div id="biography">
+        <div id="bioText">
+            <img id="self" src="/gallery/assets/self.jpg">
+            <div>
+                <div id="hello">Hello, I am</div>
+                <div id="name">Abisail Santiago</div>
+                <div id="socials">
+                    <img class="social" id="instagram" src="./gallery/assets/instagram.png">
+                </div>
+            </div>
+        </div>
+        <div id="description">I am a 16 year old photographer that uses the Canon R50 with primarily a 24-105mm f/4 lens borrowed from my schools Yearbook class. I take photos of anything!</div>
+    </div>
+    <label for="genreSelection">Choose a specific genre...</label>
+    <select id="genreSelection" name="Genre">
+        <option value="all" selected>All</option>
+        <option value="portraits">Portraits</option>
+        <option value="sports">Sports</option>
+        <option value="nature">Nature</option>
+        <option value="cars">Cars</option>
+        <option value="misc">Others</option>
+    </select>
+    <div id="gallery"></div>
+
+    <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+    <script src="gallery.js"></script>
+    <script src="index.js"></script>
+</body>
+</html>
