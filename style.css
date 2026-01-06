@@ -82,16 +82,16 @@ body[mobile] #self {
     margin-right:0;
 }
 
-#gallery {
-    column-count:4;
+#galleryHolder {
+    display:flex;
+}
+.gallery {
+    column-count:1;
     column-gap:16px;
     margin-top:20px;
     padding:5px;
 }
-body[mobile] #gallery {
-    column-count:2;
-}
-#gallery img {
+.gallery img {
     width:100%;
     height:auto;
     display:block;

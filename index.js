@@ -1,22 +1,27 @@
 const body = document.body;
 
-const galleryElem = document.getElementById('gallery')
+let mobile = false;
+if (screen.width <= 550) {
+    mobile = true;
+    body.setAttribute('mobile', '')
+}
+
+let galleries = []
 const genres = ['all', 'misc', 'portraits', 'nature', 'sports', 'cars']
 
-function shuffle(array) {
-    let currentIndex = array.length;
-    let randomIndex;
+let galleryHolder = document.getElementById('galleryHolder')
+function initGalleries() {
+    let amount = 4;
+    if(mobile) amount = 2;
 
-    while (currentIndex !== 0) {
-        randomIndex = Math.floor(Math.random() * currentIndex);
-        currentIndex--;
-
-        [array[currentIndex], array[randomIndex]] = [
-        array[randomIndex], array[currentIndex]];
+    for(let i=0;i<amount;i++) {
+        let gallery = document.createElement('div')
+        gallery.className = 'gallery';
+        galleries.push(gallery)
+        galleryHolder.appendChild(gallery)
     }
-
-    return array;
 }
+initGalleries()
 
 const blurElem = document.getElementById('blur')
 const popupElem = document.getElementById('popup')
@@ -38,8 +43,26 @@ blurElem.addEventListener('click', () => {
     }, 200)
 })
 
+function shuffle(array) {
+    let currentIndex = array.length;
+    let randomIndex;
+
+    while (currentIndex !== 0) {
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex--;
+
+        [array[currentIndex], array[randomIndex]] = [
+        array[randomIndex], array[currentIndex]];
+    }
+
+    return array;
+}
+
+let lastGallery = 0;
 function refreshPhotos(genre) {
-    galleryElem.innerHTML = '';
+    galleries.forEach(gallery => {
+        gallery.innerHTML = '';
+    })
 
     let shuffledPhotos = [];
     if (genre !== 'all') {
@@ -59,7 +82,7 @@ function refreshPhotos(genre) {
     const sentinel = document.createElement('div');
     sentinel.id = 'scroll-sentinel';
     sentinel.style.height = '1px';
-    galleryElem.after(sentinel);
+    galleryHolder.after(sentinel);
 
     function loadNextBatch() {
         const slice = shuffledPhotos.slice(
@@ -70,11 +93,16 @@ function refreshPhotos(genre) {
 
         slice.forEach(photo => {
             if (!photo) return;
+            let galleryPush = galleries[lastGallery];
+            lastGallery++;
+            if(lastGallery >= galleries.length) {
+                lastGallery = 0;
+            }
 
             const newElem = document.createElement('div');
             newElem.className = 'card';
             newElem.innerHTML = `
-                <img src="${photo.asset}" loading="lazy">
+                <img src="${photo.asset}">
                 <div class="info">
                     <div class="infoDate">${photo.date}</div>
                     <div class="infoLocation">${photo.location}</div>
@@ -95,7 +123,7 @@ function refreshPhotos(genre) {
                 newElem.querySelector('.info').style.display = 'none';
             });
 
-            galleryElem.appendChild(newElem);
+            galleryPush.appendChild(newElem);
         });
 
         if (currentIndex >= shuffledPhotos.length) {
@@ -108,7 +136,7 @@ function refreshPhotos(genre) {
             loadNextBatch();
         }
     }, {
-        rootMargin: '300px'
+        rootMargin: '700px'
     });
 
     observer.observe(sentinel);
@@ -141,9 +169,3 @@ if(window.location.hash) {
 
     refreshPhotos(genreName)
 } else { refreshPhotos('all') }
-
-let mobile = false;
-if (screen.width <= 550) {
-    mobile = true;
-    body.setAttribute('mobile', '')
-}
