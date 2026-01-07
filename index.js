@@ -17,6 +17,7 @@ function initGalleries() {
     for(let i=0;i<amount;i++) {
         let gallery = document.createElement('div')
         gallery.className = 'gallery';
+        gallery.style.width = (screen.width - 10) / amount;
         galleries.push(gallery)
         galleryHolder.appendChild(gallery)
     }
